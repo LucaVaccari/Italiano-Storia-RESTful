@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+mainClassName = "it.castelli.ServerMain"
+
+dependencies {
+    implementation project(':utils')
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+application {
+    mainClass = mainClassName
+}
+run {
+    standardInput = System.in
+}
