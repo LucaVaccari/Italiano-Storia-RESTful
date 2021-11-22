@@ -1,0 +1,5 @@
+rootProject.name = 'Italiano-Storia-RESTful'
+
+include 'client'
+include 'server'
+include 'utils'
