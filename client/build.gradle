@@ -17,6 +17,7 @@ javafx {
 
 dependencies {
     implementation project(':utils')
+    implementation  'com.konghq:unirest-java:3.13.3'
 }
 
 sourceSets {
