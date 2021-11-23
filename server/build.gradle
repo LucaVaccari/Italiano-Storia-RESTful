@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = "it.castelli.ServerMain"
+mainClassName = "it.castelli.ksv.ServerMain"
 
 dependencies {
     implementation project(':utils')

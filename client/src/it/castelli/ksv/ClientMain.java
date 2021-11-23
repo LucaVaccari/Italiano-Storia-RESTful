@@ -1,4 +1,4 @@
-package it.castelli.sir;
+package it.castelli.ksv;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
