@@ -1,5 +1,7 @@
 package it.castelli.ksv;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Spark;
 
@@ -10,6 +12,7 @@ public class ServerMain {
 	private static final int PORT = 20000;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
+	private static final JsonStringEncoder stringEncoder = new JsonStringEncoder();
 
 	public static void main(String[] args) {
 		new ServerMain().run();
@@ -33,12 +36,26 @@ public class ServerMain {
 
 		// POST
 		Spark.post("/authors", (request, response) -> {
-			DataProvider.addData(mapper.readValue(request.body(), Author.class));
-			return null;
+			try {
+				DataProvider.addData(mapper.readValue(request.body(), Author.class));
+				return "Author successfully added";
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				response.status(400);
+				return "Error in request body";
+			}
 		});
 		Spark.post("/topics", (request, response) -> {
-			DataProvider.addData(mapper.readValue(request.body(), Topic.class));
-			return null;
+			try {
+				DataProvider.addData(mapper.readValue(request.body(), Topic.class));
+				return "Topic successfully added";
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				response.status(400);
+				return "Error in request body";
+			}
 		});
 		// END POST
 
@@ -46,13 +63,29 @@ public class ServerMain {
 		Spark.put("/authors", (request, response) -> {
 			var authors = filterAuthors(request);
 
-			for (var author : authors)
-				DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
+			if (authors.size() > 1) {
+				response.status(400);
+				return "The request should query a single author";
+			}
 
-			return null;
+			try {
+				for (var author : authors)
+					DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
+				return "Author successfully updated";
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				response.status(400);
+				return "Error in request body";
+			}
 		});
 		Spark.get("/topics", ((request, response) -> {
 			var topics = filterTopics(request);
+
+			if (topics.size() > 1) {
+				response.status(400);
+				return "The request should query a single topic";
+			}
 
 			for (var topic : topics) {
 				DataProvider.modifyData(topic, mapper.readValue(request.body(), Topic.class));

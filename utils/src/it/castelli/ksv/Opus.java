@@ -11,6 +11,15 @@ public class Opus implements Entity {
 	private final String description;
 	private final ArrayList<String> connections;
 
+	public Opus() {
+		title = "";
+		publishDate = null;
+		linguisticExpression = "";
+		current = "";
+		description = "";
+		connections = new ArrayList<>();
+	}
+
 	public Opus(String title, Date publishDate, String linguisticExpression, String current, String description,
 	            ArrayList<String> connections) {
 		this.title = title;

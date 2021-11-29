@@ -7,8 +7,18 @@ public class Author implements Entity {
 	private final String firstName, lastName;
 	private final Date birthDate, deathDate;
 	private final String life;
-	private final ArrayList<Opus> texts;
+	private final ArrayList<Opus> opuses;
 	private final ArrayList<String> connections;
+
+	public Author() {
+		firstName = "";
+		lastName = "";
+		birthDate = null;
+		deathDate = null;
+		life = "";
+		opuses = new ArrayList<>();
+		connections = new ArrayList<>();
+	}
 
 	public Author(String firstName, String lastName, Date birthDate, Date deathDate, String life,
 	              ArrayList<Opus> texts, ArrayList<String> connections) {
@@ -17,7 +27,7 @@ public class Author implements Entity {
 		this.birthDate = birthDate;
 		this.deathDate = deathDate;
 		this.life = life;
-		this.texts = texts;
+		this.opuses = texts;
 		this.connections = connections;
 	}
 
@@ -42,7 +52,7 @@ public class Author implements Entity {
 	}
 
 	public ArrayList<Opus> getOpuses() {
-		return texts;
+		return opuses;
 	}
 
 	public ArrayList<String> getConnections() {
@@ -57,7 +67,7 @@ public class Author implements Entity {
 				", birthDate=" + birthDate +
 				", deathDate=" + deathDate +
 				", life='" + life + '\'' +
-				", texts=" + texts +
+				", texts=" + opuses +
 				", connections=" + connections +
 				'}';
 	}
