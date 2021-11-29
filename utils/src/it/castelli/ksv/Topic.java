@@ -10,7 +10,7 @@ public class Topic implements Entity {
 	private final ArrayList<String> connections;
 
 	public Topic(String name, Date startDate, Date endDate, String description, String place,
-                 ArrayList<String> connections) {
+	             ArrayList<String> connections) {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;

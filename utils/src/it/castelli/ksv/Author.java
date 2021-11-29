@@ -11,7 +11,7 @@ public class Author implements Entity {
 	private final ArrayList<String> connections;
 
 	public Author(String firstName, String lastName, Date birthDate, Date deathDate, String life,
-                  ArrayList<Opus> texts, ArrayList<String> connections) {
+	              ArrayList<Opus> texts, ArrayList<String> connections) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
@@ -47,5 +47,18 @@ public class Author implements Entity {
 
 	public ArrayList<String> getConnections() {
 		return connections;
+	}
+
+	@Override
+	public String toString() {
+		return "Author{" +
+				"firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", birthDate=" + birthDate +
+				", deathDate=" + deathDate +
+				", life='" + life + '\'' +
+				", texts=" + texts +
+				", connections=" + connections +
+				'}';
 	}
 }

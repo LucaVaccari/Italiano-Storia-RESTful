@@ -16,7 +16,12 @@ public class DataProvider {
 		addData(new Author("Luigi", "Pirandello", new Date(1885, 2, 19),
 				new Date(1950, 4, 23), "Was born and dead", new ArrayList<>(), new ArrayList<>()));
 		addData(new Author("Giovanni", "Verga", new Date(1885, 2, 19),
-				new Date(1950, 4, 23), "Was born and dead", opuses, new ArrayList<>()));
+				new Date(1949, 4, 23), "Was born and dead", opuses, new ArrayList<>()));
+
+		addData(new Topic("Prima Guerra Mondiale", new Date(1914, 5, 24), new Date(1918, 11, 4), "Prima guerra",
+				"Mondo", new ArrayList<>()));
+		addData(new Topic("Decadentismo", new Date(1860, 1, 1), new Date(1910, 4, 6), "Corrente culturale " +
+				"decadentista", "Europa", new ArrayList<>()));
 		// END TEST
 	}
 
@@ -48,8 +53,20 @@ public class DataProvider {
 
 	public static Author getAuthor(String lastName) {
 		return Arrays.stream(getAllAuthors())
-				.filter(author -> author.getLastName().equals(lastName))
+				.filter(author -> author.getLastName().equalsIgnoreCase(lastName))
 				.findFirst()
 				.orElse(null);
+	}
+
+	public static Topic getTopic(String topicName) {
+		return Arrays.stream(getAllTopics())
+				.filter(topic -> topic.getName().equalsIgnoreCase(topicName))
+				.findFirst()
+				.orElse(null);
+	}
+
+	public static void modifyData(Entity oldE, Entity newE) {
+		data.remove(oldE);
+		data.add(newE);
 	}
 }

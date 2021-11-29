@@ -1,3 +1,4 @@
 package it.castelli.ksv;
 
-public interface Entity {}
+public interface Entity {
+}
