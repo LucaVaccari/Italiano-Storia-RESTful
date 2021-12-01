@@ -1,7 +1,6 @@
 package it.castelli.ksv;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Spark;
 
@@ -12,7 +11,6 @@ public class ServerMain {
 	private static final int PORT = 20000;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
-	private static final JsonStringEncoder stringEncoder = new JsonStringEncoder();
 
 	public static void main(String[] args) {
 		new ServerMain().run();
