@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ServerMain {
-	private static final int PORT = 20000;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -18,16 +17,18 @@ public class ServerMain {
 
 	public void run() {
 		DataProvider.initialize();
-		Spark.port(PORT);
+		Spark.port(SharedData.PORT);
 
 		// GET
 		Spark.get("/authors", (request, response) -> {
 			var authors = filterAuthors(request);
+			System.out.println("Returning author(s)");
 			return mapper.writeValueAsString(authors.toArray(new Author[0]));
 		});
 
 		Spark.get("/topics", ((request, response) -> {
 			var topics = filterTopics(request);
+			System.out.println("Returning topic(s)");
 			return mapper.writeValueAsString(topics);
 		}));
 		// END GET
@@ -36,6 +37,7 @@ public class ServerMain {
 		Spark.post("/authors", (request, response) -> {
 			try {
 				DataProvider.addData(mapper.readValue(request.body(), Author.class));
+				System.out.println("Author successfully added");
 				return "Author successfully added";
 			}
 			catch (JsonProcessingException e) {
@@ -47,6 +49,7 @@ public class ServerMain {
 		Spark.post("/topics", (request, response) -> {
 			try {
 				DataProvider.addData(mapper.readValue(request.body(), Topic.class));
+				System.out.println("Topic successfully added");
 				return "Topic successfully added";
 			}
 			catch (JsonProcessingException e) {
@@ -69,6 +72,7 @@ public class ServerMain {
 			try {
 				for (var author : authors)
 					DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
+				System.out.println("Author successfully updated");
 				return "Author successfully updated";
 			}
 			catch (JsonProcessingException e) {
@@ -88,8 +92,8 @@ public class ServerMain {
 			for (var topic : topics) {
 				DataProvider.modifyData(topic, mapper.readValue(request.body(), Topic.class));
 			}
-
-			return null;
+			System.out.println("Topic successfully updated");
+			return "Topic successfully updated";
 		}));
 		// END PUT
 
@@ -100,7 +104,8 @@ public class ServerMain {
 				DataProvider.removeData(author);
 			}
 
-			return null;
+			System.out.println("Author(s) removed");
+			return "Author(s) removed";
 		});
 
 		Spark.get("/topics", ((request, response) -> {
@@ -110,11 +115,12 @@ public class ServerMain {
 				DataProvider.removeData(topic);
 			}
 
-			return null;
+			System.out.println("Topic(s) removed");
+			return "Topic(s) removed";
 		}));
 		// END DELETE
 
-		System.out.println("Server running on " + PORT);
+		System.out.println("Server running on " + SharedData.PORT);
 	}
 
 	private static ArrayList<Author> filterAuthors(spark.Request request) {
