@@ -9,176 +9,173 @@ import java.util.Arrays;
 
 public class ServerMain {
 
-	private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-	public static void main(String[] args) {
-		new ServerMain().run();
-	}
+    public static void main(String[] args) {
+        new ServerMain().run();
+    }
 
-	public void run() {
-		DataProvider.initialize();
-		Spark.port(SharedData.PORT);
+    private static ArrayList<Author> filterAuthors(spark.Request request) {
+        ArrayList<Author> authors = new ArrayList<>(Arrays.asList(DataProvider.getAllAuthors()));
+        // allowed params: firstName, lastName, birthYear, deathYear, lifeYear
+        for (String queryParam : request.queryParams()) {
+            switch (queryParam.toLowerCase()) {
+                case "firstname" -> authors = new ArrayList<>(authors.stream()
+                        .filter(a -> a.getFirstName().equalsIgnoreCase(request.queryParams(queryParam)))
+                        .toList());
+                case "lastname" -> authors = new ArrayList<>(authors.stream()
+                        .filter(a -> a.getLastName().equalsIgnoreCase(request.queryParams(queryParam)))
+                        .toList());
+                case "birthyear" -> authors = new ArrayList<>(authors.stream()
+                        .filter(a -> a.getBirthDate().getYear() ==
+                                Integer.parseInt(request.queryParams(queryParam)))
+                        .toList());
+                case "deathyear" -> authors = new ArrayList<>(authors.stream()
+                        .filter(a -> a.getDeathDate().getYear() ==
+                                Integer.parseInt(request.queryParams(queryParam)))
+                        .toList());
+                case "lifeyear" -> {
+                    int year = Integer.parseInt(request.queryParams(queryParam));
+                    authors = new ArrayList<>(authors.stream()
+                            .filter(a -> year >= a.getBirthDate().getYear())
+                            .filter(a -> year <= a.getDeathDate().getYear())
+                            .toList());
+                }
+                default -> {
+                }
+            }
+        }
 
-		// GET
-		Spark.get("/authors", (request, response) -> {
-			var authors = filterAuthors(request);
-			System.out.println("Returning author(s)");
-			return mapper.writeValueAsString(authors.toArray(new Author[0]));
-		});
+        return authors;
+    }
 
-		Spark.get("/topics", ((request, response) -> {
-			var topics = filterTopics(request);
-			System.out.println("Returning topic(s)");
-			return mapper.writeValueAsString(topics);
-		}));
-		// END GET
+    private static ArrayList<Topic> filterTopics(spark.Request request) {
+        ArrayList<Topic> topics = new ArrayList<>(Arrays.asList(DataProvider.getAllTopics()));
+        // allowed params: name, year, place
+        for (String queryParam : request.queryParams()) {
+            switch (queryParam.toLowerCase()) {
+                case "name" -> topics = new ArrayList<>(topics.stream()
+                        .filter(t -> t.getName()
+                                .equalsIgnoreCase(request.queryParams(queryParam).replaceAll("-", " ")))
+                        .toList());
+                case "year" -> {
+                    int year = Integer.parseInt(request.queryParams(queryParam));
+                    topics = new ArrayList<>(topics.stream()
+                            .filter(t -> year >= t.getStartDate().getYear())
+                            .filter(t -> year <= t.getEndDate().getYear())
+                            .toList());
+                }
+                case "place" -> topics = new ArrayList<>(topics.stream()
+                        .filter(t -> t.getPlace().equalsIgnoreCase(request.queryParams(queryParam)))
+                        .toList());
+            }
+        }
 
-		// POST
-		Spark.post("/authors", (request, response) -> {
-			try {
-				DataProvider.addData(mapper.readValue(request.body(), Author.class));
-				System.out.println("Author successfully added");
-				return "Author successfully added";
-			}
-			catch (JsonProcessingException e) {
-				e.printStackTrace();
-				response.status(400);
-				return "Error in request body";
-			}
-		});
-		Spark.post("/topics", (request, response) -> {
-			try {
-				DataProvider.addData(mapper.readValue(request.body(), Topic.class));
-				System.out.println("Topic successfully added");
-				return "Topic successfully added";
-			}
-			catch (JsonProcessingException e) {
-				e.printStackTrace();
-				response.status(400);
-				return "Error in request body";
-			}
-		});
-		// END POST
+        return topics;
+    }
 
-		// PUT
-		Spark.put("/authors", (request, response) -> {
-			var authors = filterAuthors(request);
+    public void run() {
+        DataProvider.initialize();
+        Spark.port(SharedData.PORT);
 
-			if (authors.size() > 1) {
-				response.status(400);
-				return "The request should query a single author";
-			}
+        // GET
+        Spark.get("/authors", (request, response) -> {
+            var authors = filterAuthors(request);
+            System.out.println("Returning author(s)");
+            return mapper.writeValueAsString(authors.toArray(new Author[0]));
+        });
 
-			try {
-				for (var author : authors)
-					DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
-				System.out.println("Author successfully updated");
-				return "Author successfully updated";
-			}
-			catch (JsonProcessingException e) {
-				e.printStackTrace();
-				response.status(400);
-				return "Error in request body";
-			}
-		});
-		Spark.get("/topics", ((request, response) -> {
-			var topics = filterTopics(request);
+        Spark.get("/topics", ((request, response) -> {
+            var topics = filterTopics(request);
+            System.out.println("Returning topic(s)");
+            return mapper.writeValueAsString(topics);
+        }));
+        // END GET
 
-			if (topics.size() > 1) {
-				response.status(400);
-				return "The request should query a single topic";
-			}
+        // POST
+        Spark.post("/authors", (request, response) -> {
+            try {
+                DataProvider.addData(mapper.readValue(request.body(), Author.class));
+                System.out.println("Author successfully added");
+                return "Author successfully added";
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                response.status(400);
+                return "Error in request body";
+            }
+        });
+        Spark.post("/topics", (request, response) -> {
+            try {
+                DataProvider.addData(mapper.readValue(request.body(), Topic.class));
+                System.out.println("Topic successfully added");
+                return "Topic successfully added";
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                response.status(400);
+                return "Error in request body";
+            }
+        });
+        // END POST
 
-			for (var topic : topics) {
-				DataProvider.modifyData(topic, mapper.readValue(request.body(), Topic.class));
-			}
-			System.out.println("Topic successfully updated");
-			return "Topic successfully updated";
-		}));
-		// END PUT
+        // PUT
+        Spark.put("/authors", (request, response) -> {
+            var authors = filterAuthors(request);
 
-		// DELETE
-		Spark.delete("/authors", (request, response) -> {
-			var authors = filterAuthors(request);
-			for (var author : authors) {
-				DataProvider.removeData(author);
-			}
+            if (authors.size() > 1) {
+                response.status(400);
+                return "The request should query a single author";
+            }
 
-			System.out.println("Author(s) removed");
-			return "Author(s) removed";
-		});
+            try {
+                for (var author : authors)
+                    DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
+                System.out.println("Author successfully updated");
+                return "Author successfully updated";
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                response.status(400);
+                return "Error in request body";
+            }
+        });
+        Spark.get("/topics", ((request, response) -> {
+            var topics = filterTopics(request);
 
-		Spark.get("/topics", ((request, response) -> {
-			var topics = filterTopics(request);
+            if (topics.size() > 1) {
+                response.status(400);
+                return "The request should query a single topic";
+            }
 
-			for (var topic : topics) {
-				DataProvider.removeData(topic);
-			}
+            for (var topic : topics) {
+                DataProvider.modifyData(topic, mapper.readValue(request.body(), Topic.class));
+            }
+            System.out.println("Topic successfully updated");
+            return "Topic successfully updated";
+        }));
+        // END PUT
 
-			System.out.println("Topic(s) removed");
-			return "Topic(s) removed";
-		}));
-		// END DELETE
+        // DELETE
+        Spark.delete("/authors", (request, response) -> {
+            var authors = filterAuthors(request);
+            for (var author : authors) {
+                DataProvider.removeData(author);
+            }
 
-		System.out.println("Server running on " + SharedData.PORT);
-	}
+            System.out.println("Author(s) removed");
+            return "Author(s) removed";
+        });
 
-	private static ArrayList<Author> filterAuthors(spark.Request request) {
-		ArrayList<Author> authors = new ArrayList<>(Arrays.asList(DataProvider.getAllAuthors()));
-		// allowed params: firstName, lastName, birthYear, deathYear, lifeYear
-		for (String queryParam : request.queryParams()) {
-			switch (queryParam.toLowerCase()) {
-				case "firstname" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getFirstName().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-				case "lastname" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getLastName().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-				case "birthyear" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getBirthDate().getYear() ==
-								Integer.parseInt(request.queryParams(queryParam)))
-						.toList());
-				case "deathyear" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getDeathDate().getYear() ==
-								Integer.parseInt(request.queryParams(queryParam)))
-						.toList());
-				case "lifeyear" -> {
-					int year = Integer.parseInt(request.queryParams(queryParam));
-					authors = new ArrayList<>(authors.stream()
-							.filter(a -> year >= a.getBirthDate().getYear())
-							.filter(a -> year <= a.getDeathDate().getYear())
-							.toList());
-				}
-				default -> {
-				}
-			}
-		}
+        Spark.get("/topics", ((request, response) -> {
+            var topics = filterTopics(request);
 
-		return authors;
-	}
+            for (var topic : topics) {
+                DataProvider.removeData(topic);
+            }
 
-	private static ArrayList<Topic> filterTopics(spark.Request request) {
-		ArrayList<Topic> topics = new ArrayList<>(Arrays.asList(DataProvider.getAllTopics()));
-		// allowed params: name, year, place
-		for (String queryParam : request.queryParams()) {
-			switch (queryParam.toLowerCase()) {
-				case "name" -> topics = new ArrayList<>(topics.stream()
-						.filter(t -> t.getName()
-								.equalsIgnoreCase(request.queryParams(queryParam).replaceAll("-", " ")))
-						.toList());
-				case "year" -> {
-					int year = Integer.parseInt(request.queryParams(queryParam));
-					topics = new ArrayList<>(topics.stream()
-							.filter(t -> year >= t.getStartDate().getYear())
-							.filter(t -> year <= t.getEndDate().getYear())
-							.toList());
-				}
-				case "place" -> topics = new ArrayList<>(topics.stream()
-						.filter(t -> t.getPlace().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-			}
-		}
+            System.out.println("Topic(s) removed");
+            return "Topic(s) removed";
+        }));
+        // END DELETE
 
-		return topics;
-	}
+        System.out.println("Server running on " + SharedData.PORT);
+    }
 }

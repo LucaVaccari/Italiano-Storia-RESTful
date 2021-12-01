@@ -8,6 +8,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Controller for FXMLs/mainScene.fxml
+ */
 public class MainSceneController {
     @FXML
     private void initialize() {
