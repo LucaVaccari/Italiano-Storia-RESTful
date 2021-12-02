@@ -1,6 +1,5 @@
 package it.castelli.ksv;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Spark;
 
@@ -16,7 +15,7 @@ public class ServerMain {
     }
 
     private static ArrayList<Author> filterAuthors(spark.Request request) {
-        ArrayList<Author> authors = new ArrayList<>(Arrays.asList(DataProvider.getAllAuthors()));
+        ArrayList<Author> authors = new ArrayList<>(Arrays.asList(DatabaseInterface.getAllAuthors()));
         // allowed params: firstName, lastName, birthYear, deathYear, lifeYear
         for (String queryParam : request.queryParams()) {
             switch (queryParam.toLowerCase()) {
@@ -50,7 +49,7 @@ public class ServerMain {
     }
 
     private static ArrayList<Topic> filterTopics(spark.Request request) {
-        ArrayList<Topic> topics = new ArrayList<>(Arrays.asList(DataProvider.getAllTopics()));
+        ArrayList<Topic> topics = new ArrayList<>(Arrays.asList(DatabaseInterface.getAllTopics()));
         // allowed params: name, year, place
         for (String queryParam : request.queryParams()) {
             switch (queryParam.toLowerCase()) {
@@ -75,7 +74,7 @@ public class ServerMain {
     }
 
     public void run() {
-        DataProvider.initialize();
+        DatabaseInterface.initialize();
         Spark.port(SharedData.PORT);
 
         // GET
@@ -103,26 +102,14 @@ public class ServerMain {
 
         // POST
         Spark.post("/authors", (request, response) -> {
-            try {
-                DataProvider.addData(mapper.readValue(request.body(), Author.class));
-                System.out.println("Author successfully added");
-                return "Author successfully added";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                response.status(400);
-                return "Error in request body";
-            }
+            //                DataProvider.addData(mapper.readValue(request.body(), Author.class));
+            System.out.println("Author successfully added");
+            return "Author successfully added";
         });
         Spark.post("/topics", (request, response) -> {
-            try {
-                DataProvider.addData(mapper.readValue(request.body(), Topic.class));
-                System.out.println("Topic successfully added");
-                return "Topic successfully added";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                response.status(400);
-                return "Error in request body";
-            }
+            //                DataProvider.addData(mapper.readValue(request.body(), Topic.class));
+            System.out.println("Topic successfully added");
+            return "Topic successfully added";
         });
         // END POST
 
