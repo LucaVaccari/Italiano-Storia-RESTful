@@ -5,7 +5,6 @@ import it.castelli.ksv.HTTPHandler;
 import javafx.fxml.FXML;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,7 +23,7 @@ public class MainSceneController {
     @FXML
     private void onPostButton() {
         Author author = new Author("Giuseppe", "Ungaretti", new Date(1888, 2, 19),
-                new Date(1970, 4, 23), "Was born and dead", new ArrayList<>(), new ArrayList<>());
+                new Date(1970, 4, 23), "Was born and dead");
         System.out.println(HTTPHandler.postAuthor(author));
     }
 

@@ -90,6 +90,15 @@ public class ServerMain {
             System.out.println("Returning topic(s)");
             return mapper.writeValueAsString(topics);
         }));
+
+        // TODO:
+        Spark.get("/authors/:id", (request, response) -> {
+            return null;
+        });
+
+        Spark.get("/topics/:id", ((request, response) -> {
+            return null;
+        }));
         // END GET
 
         // POST
@@ -118,59 +127,27 @@ public class ServerMain {
         // END POST
 
         // PUT
-        Spark.put("/authors", (request, response) -> {
-            var authors = filterAuthors(request);
-
-            if (authors.size() > 1) {
-                response.status(400);
-                return "The request should query a single author";
-            }
-
-            try {
-                for (var author : authors)
-                    DataProvider.modifyData(author, mapper.readValue(request.body(), Author.class));
-                System.out.println("Author successfully updated");
-                return "Author successfully updated";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                response.status(400);
-                return "Error in request body";
-            }
+        Spark.put("/authors/:id", (request, response) -> {
+            //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Author.class));
+            System.out.println("Author successfully updated");
+            return "Author successfully updated";
         });
-        Spark.get("/topics", ((request, response) -> {
-            var topics = filterTopics(request);
-
-            if (topics.size() > 1) {
-                response.status(400);
-                return "The request should query a single topic";
-            }
-
-            for (var topic : topics) {
-                DataProvider.modifyData(topic, mapper.readValue(request.body(), Topic.class));
-            }
+        Spark.get("/topics/:id", ((request, response) -> {
+            //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Topic.class));
             System.out.println("Topic successfully updated");
             return "Topic successfully updated";
         }));
         // END PUT
 
         // DELETE
-        Spark.delete("/authors", (request, response) -> {
-            var authors = filterAuthors(request);
-            for (var author : authors) {
-                DataProvider.removeData(author);
-            }
-
+        Spark.delete("/authors/:id", (request, response) -> {
+            //DataProvider.removeData(request.params(":id"));
             System.out.println("Author(s) removed");
             return "Author(s) removed";
         });
 
-        Spark.get("/topics", ((request, response) -> {
-            var topics = filterTopics(request);
-
-            for (var topic : topics) {
-                DataProvider.removeData(topic);
-            }
-
+        Spark.get("/topics/:id", ((request, response) -> {
+            //DataProvider.removeData(request.params(":id"));
             System.out.println("Topic(s) removed");
             return "Topic(s) removed";
         }));

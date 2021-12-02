@@ -1,14 +1,11 @@
 package it.castelli.ksv;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 public class Author implements Entity {
     private final String firstName, lastName;
     private final Date birthDate, deathDate;
     private final String life;
-    private final ArrayList<Opus> opuses;
-    private final ArrayList<String> connections;
 
     public Author() {
         firstName = "";
@@ -16,19 +13,14 @@ public class Author implements Entity {
         birthDate = null;
         deathDate = null;
         life = "";
-        opuses = new ArrayList<>();
-        connections = new ArrayList<>();
     }
 
-    public Author(String firstName, String lastName, Date birthDate, Date deathDate, String life,
-                  ArrayList<Opus> texts, ArrayList<String> connections) {
+    public Author(String firstName, String lastName, Date birthDate, Date deathDate, String life) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.deathDate = deathDate;
         this.life = life;
-        this.opuses = texts;
-        this.connections = connections;
     }
 
     public String getFirstName() {
@@ -51,14 +43,6 @@ public class Author implements Entity {
         return life;
     }
 
-    public ArrayList<Opus> getOpuses() {
-        return opuses;
-    }
-
-    public ArrayList<String> getConnections() {
-        return connections;
-    }
-
     @Override
     public String toString() {
         return "Author{" +
@@ -67,8 +51,6 @@ public class Author implements Entity {
                 ", birthDate=" + birthDate +
                 ", deathDate=" + deathDate +
                 ", life='" + life + '\'' +
-                ", texts=" + opuses +
-                ", connections=" + connections +
                 '}';
     }
 }
