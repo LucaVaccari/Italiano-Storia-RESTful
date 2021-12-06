@@ -55,8 +55,10 @@ public final class DatabaseInterface {
 	public static Author[] getAllAuthors() {
 		ArrayList<Author> authorList = new ArrayList<>();
 		try {
-			ResultSet result = sqlConnection.createStatement()
-					.executeQuery("select * from autori");
+			String sql =
+					"select * from autori where nome = ? and cognome = ? and data_nascita = ? and data_morte = ? and ?" +
+							" BETWEEN data_nascita and data_morte;";
+			ResultSet result = sqlConnection.createStatement().executeQuery(sql);
 			while (result.next()) {
 				authorList.add(new Author(
 						result.getString("nome"),
