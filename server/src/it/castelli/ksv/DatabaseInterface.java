@@ -63,9 +63,7 @@ public final class DatabaseInterface {
 			ArrayList<Filter> filterArr = new ArrayList<>();
 			for (var entry : filterMap.entrySet()) {
 				switch (entry.getKey().toLowerCase()) {
-					case "firstname", "deathyear", "lastname", "birthyear" -> {
-						filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
-					}
+					case "firstname", "deathyear", "lastname", "birthyear" -> filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
 				}
 			}
 			String[] fields = new String[]{"nome", "cognome", "data_nascita", "data_morte", "vita"};
@@ -92,11 +90,19 @@ public final class DatabaseInterface {
 	 *
 	 * @return An array of the topics of the database.
 	 */
-	public static Topic[] getAllTopics() {
+	public static Topic[] getAllTopics(HashMap<String, String> filterMap) {
 		ArrayList<Topic> topicList = new ArrayList<>();
 
 		try {
-			ResultSet result = sqlConnection.createStatement().executeQuery("select * from argomenti");
+			ArrayList<Filter> filterArr = new ArrayList<>();
+			for (var entry : filterMap.entrySet()) {
+				switch (entry.getKey().toLowerCase()) {
+					case "name", "place" -> filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
+				}
+			}
+			String[] fields = new String[]{"nome", "data_inizio", "data_fine", "descrizione", "luogo"};
+			String sql = QueryGenerator.generateSelectQuery(fields, "argomenti", filterArr.toArray(new Filter[0]));
+			ResultSet result = sqlConnection.createStatement().executeQuery(sql);
 			while (result.next()) {
 				topicList.add(new Topic(
 						result.getString("nome"),

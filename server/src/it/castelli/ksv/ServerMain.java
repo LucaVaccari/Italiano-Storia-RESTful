@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Request;
 import spark.Spark;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ServerMain {
@@ -14,31 +12,6 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 		new ServerMain().run();
-	}
-
-	private static ArrayList<Topic> filterTopics(spark.Request request) {
-		ArrayList<Topic> topics = new ArrayList<>(Arrays.asList(DatabaseInterface.getAllTopics()));
-		// allowed params: name, year, place
-		for (String queryParam : request.queryParams()) {
-			switch (queryParam.toLowerCase()) {
-				case "name" -> topics = new ArrayList<>(topics.stream()
-						.filter(t -> t.getName()
-								.equalsIgnoreCase(request.queryParams(queryParam).replaceAll("-", " ")))
-						.toList());
-				case "year" -> {
-					int year = Integer.parseInt(request.queryParams(queryParam));
-					topics = new ArrayList<>(topics.stream()
-							.filter(t -> year >= t.getStartDate().getYear())
-							.filter(t -> year <= t.getEndDate().getYear())
-							.toList());
-				}
-				case "place" -> topics = new ArrayList<>(topics.stream()
-						.filter(t -> t.getPlace().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-			}
-		}
-
-		return topics;
 	}
 
 	private HashMap<String, String> generateQueryMap(Request request) {
@@ -54,12 +27,14 @@ public class ServerMain {
 		// GET
 		Spark.get("/authors", (request, response) -> {
 			var authors = DatabaseInterface.getAllAuthors(generateQueryMap(request));
+			// TODO: filter result for lifeyear
 			System.out.println("Returning author(s)");
 			return mapper.writeValueAsString(authors);
 		});
 
 		Spark.get("/topics", ((request, response) -> {
-			var topics = filterTopics(request);
+			var topics = DatabaseInterface.getAllTopics(generateQueryMap(request));
+			// TODO: filter result for year
 			System.out.println("Returning topic(s)");
 			return mapper.writeValueAsString(topics);
 		}));
