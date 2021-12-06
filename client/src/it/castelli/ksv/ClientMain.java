@@ -10,23 +10,24 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ClientMain extends Application {
-    public static final String MAIN_SCENE_FXML_PATH = "/FXMLs/mainScene.fxml";
+	public static final String MAIN_SCENE_FXML_PATH = "/FXMLs/get.fxml";
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	public static void main(String[] args) {
+		launch(args);
+	}
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            URL resource = getClass().getResource(MAIN_SCENE_FXML_PATH);
-            assert resource != null;
-            Parent root = FXMLLoader.load(resource);
-            Scene mainScene = new Scene(root);
-            primaryStage.setScene(mainScene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			URL resource = getClass().getResource(MAIN_SCENE_FXML_PATH);
+			assert resource != null;
+			Parent root = FXMLLoader.load(resource);
+			Scene mainScene = new Scene(root);
+			primaryStage.setScene(mainScene);
+			primaryStage.show();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
