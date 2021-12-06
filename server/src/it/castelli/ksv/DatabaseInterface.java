@@ -1,10 +1,15 @@
 package it.castelli.ksv;
 
+import it.castelli.ksv.sqlUtils.QueryGenerator;
+import it.castelli.ksv.sqlUtils.filters.EqualFilter;
+import it.castelli.ksv.sqlUtils.filters.Filter;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class to interact with the MySQL database. initialize() should be called before using this class.
@@ -52,12 +57,19 @@ public final class DatabaseInterface {
 	 *
 	 * @return An array of the authors of the database.
 	 */
-	public static Author[] getAllAuthors() {
+	public static Author[] getAllAuthors(HashMap<String, String> filterMap) {
 		ArrayList<Author> authorList = new ArrayList<>();
 		try {
-			String sql =
-					"select * from autori where nome = ? and cognome = ? and data_nascita = ? and data_morte = ? and ?" +
-							" BETWEEN data_nascita and data_morte;";
+			ArrayList<Filter> filterArr = new ArrayList<>();
+			for (var entry : filterMap.entrySet()) {
+				switch (entry.getKey().toLowerCase()) {
+					case "firstname", "deathyear", "lastname", "birthyear" -> {
+						filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
+					}
+				}
+			}
+			String[] fields = new String[]{"nome", "cognome", "data_nascita", "data_morte", "vita"};
+			String sql = QueryGenerator.generateSelectQuery(fields, "autori", filterArr.toArray(new Filter[0]));
 			ResultSet result = sqlConnection.createStatement().executeQuery(sql);
 			while (result.next()) {
 				authorList.add(new Author(

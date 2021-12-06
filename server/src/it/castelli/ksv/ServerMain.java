@@ -1,65 +1,19 @@
 package it.castelli.ksv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.castelli.ksv.sqlUtils.QueryGenerator;
-import it.castelli.ksv.sqlUtils.filters.BetweenFilter;
-import it.castelli.ksv.sqlUtils.filters.EqualFilter;
-import it.castelli.ksv.sqlUtils.filters.Filter;
+import spark.Request;
 import spark.Spark;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ServerMain {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
 	public static void main(String[] args) {
-		Filter[] filters = new Filter[]{
-				new EqualFilter("chiave1", "valore1"),
-				new EqualFilter("chiave2", "valore2"),
-				new BetweenFilter("anno", "1915", "1918"),
-				new EqualFilter("chiave3", "valore3"),
-		};
-		String[] fields = new String[]{"id", "nome", "cognome"};
-		System.out.println(QueryGenerator.generateSelectQuery(fields, "tabella", filters));
-
-
 		new ServerMain().run();
-	}
-
-	private static ArrayList<Author> filterAuthors(spark.Request request) {
-		ArrayList<Author> authors = new ArrayList<>(Arrays.asList(DatabaseInterface.getAllAuthors()));
-		// allowed params: firstName, lastName, birthYear, deathYear, lifeYear
-		for (String queryParam : request.queryParams()) {
-			switch (queryParam.toLowerCase()) {
-				case "firstname" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getFirstName().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-				case "lastname" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getLastName().equalsIgnoreCase(request.queryParams(queryParam)))
-						.toList());
-				case "birthyear" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getBirthDate().getYear() ==
-								Integer.parseInt(request.queryParams(queryParam)))
-						.toList());
-				case "deathyear" -> authors = new ArrayList<>(authors.stream()
-						.filter(a -> a.getDeathDate().getYear() ==
-								Integer.parseInt(request.queryParams(queryParam)))
-						.toList());
-				case "lifeyear" -> {
-					int year = Integer.parseInt(request.queryParams(queryParam));
-					authors = new ArrayList<>(authors.stream()
-							.filter(a -> year >= a.getBirthDate().getYear())
-							.filter(a -> year <= a.getDeathDate().getYear())
-							.toList());
-				}
-				default -> {
-				}
-			}
-		}
-
-		return authors;
 	}
 
 	private static ArrayList<Topic> filterTopics(spark.Request request) {
@@ -87,15 +41,21 @@ public class ServerMain {
 		return topics;
 	}
 
+	private HashMap<String, String> generateQueryMap(Request request) {
+		HashMap<String, String> map = new HashMap<>();
+		for (var queryParam : request.queryParams()) map.put(queryParam, request.queryParams(queryParam));
+		return map;
+	}
+
 	public void run() {
 		DatabaseInterface.initialize();
 		Spark.port(SharedData.PORT);
 
 		// GET
 		Spark.get("/authors", (request, response) -> {
-			var authors = filterAuthors(request);
+			var authors = DatabaseInterface.getAllAuthors(generateQueryMap(request));
 			System.out.println("Returning author(s)");
-			return mapper.writeValueAsString(authors.toArray(new Author[0]));
+			return mapper.writeValueAsString(authors);
 		});
 
 		Spark.get("/topics", ((request, response) -> {
