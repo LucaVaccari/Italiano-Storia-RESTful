@@ -4,10 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import spark.Request;
 import spark.Spark;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RestService {
 	private static final ObjectMapper mapper = new ObjectMapper();
+
+	// TODO: get author id
+	// TODO: get topic id
+
+	// TODO: queries for opuses
 
 	/**
 	 * Starts the REST service, configuring the HTTP methods
@@ -18,26 +24,40 @@ public class RestService {
 
 		// GET
 		Spark.get("/authors", (request, response) -> {
-			var authors = DatabaseInterface.getAllAuthors(generateQueryMap(request));
-			// TODO: filter result for lifeyear
+			HashMap<String, String> filterMap = generateQueryMap(request);
+			var authors = DatabaseInterface.getAllAuthors(filterMap);
+			// TODO: test
+			if (filterMap.containsKey("lifeyear")) {
+				int lifeYear = Integer.parseInt(filterMap.get("lifeyear"));
+				authors =
+						Arrays.stream(authors).filter(a -> lifeYear > a.getBirthDate().getYear() &&
+								lifeYear < a.getDeathDate().getYear()).toList().toArray(new Author[0]);
+			}
 			System.out.println("Returning author(s)");
 			return mapper.writeValueAsString(authors);
 		});
 
 		Spark.get("/topics", ((request, response) -> {
-			var topics = DatabaseInterface.getAllTopics(generateQueryMap(request));
-			// TODO: filter result for year
+			HashMap<String, String> filterMap = generateQueryMap(request);
+			var topics = DatabaseInterface.getAllTopics(filterMap);
+			// TODO: test
+			if (filterMap.containsKey("lifeyear")) {
+				int lifeYear = Integer.parseInt(filterMap.get("lifeyear"));
+				topics =
+						Arrays.stream(topics).filter(a -> lifeYear > a.getStartDate().getYear() &&
+								lifeYear < a.getEndDate().getYear()).toList().toArray(new Topic[0]);
+			}
 			System.out.println("Returning topic(s)");
 			return mapper.writeValueAsString(topics);
 		}));
 
-		// TODO:
+		// TODO: implement id search
 		Spark.get("/authors/:id", (request, response) -> null);
 
 		Spark.get("/topics/:id", ((request, response) -> null));
 		// END GET
 
-		// TODO:
+		// TODO: implement POST
 		// POST
 		Spark.post("/authors", (request, response) -> {
 			//DataProvider.addData(mapper.readValue(request.body(), Author.class));
@@ -51,7 +71,7 @@ public class RestService {
 		});
 		// END POST
 
-		// TODO:
+		// TODO: imlement PUT
 		// PUT
 		Spark.put("/authors/:id", (request, response) -> {
 			//DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Author.class));
@@ -65,7 +85,7 @@ public class RestService {
 		}));
 		// END PUT
 
-		// TODO:
+		// TODO: implement DELETE
 		// DELETE
 		Spark.delete("/authors/:id", (request, response) -> {
 			//DataProvider.removeData(request.params(":id"));
@@ -96,3 +116,32 @@ public class RestService {
 		return map;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

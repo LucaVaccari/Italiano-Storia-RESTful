@@ -8,6 +8,8 @@ public class Opus implements Entity {
 	private final String linguisticExpression;
 	private final String current;
 	private final String description;
+	// TODO: private final int authorId;
+	// TODO: private final int[] topicsIds;
 
 	public Opus() {
 		title = "";

@@ -6,6 +6,8 @@ public class Author implements Entity {
 	private final String firstName, lastName;
 	private final Date birthDate, deathDate;
 	private final String life;
+	// TODO: private final int[] opusesIds;
+	// TODO: private final int[] topicsIds;
 
 	public Author() {
 		firstName = "";

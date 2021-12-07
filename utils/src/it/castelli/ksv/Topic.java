@@ -6,6 +6,8 @@ public class Topic implements Entity {
 	private final String name;
 	private final Date startDate, endDate;
 	private final String description, place;
+	// TODO: private final int[] topicsIds;
+	// TODO: private final int[] authorsIds;
 
 	public Topic(String name, Date startDate, Date endDate, String description, String place) {
 		this.name = name;
