@@ -32,13 +32,9 @@ public class RestService {
 		}));
 
 		// TODO:
-		Spark.get("/authors/:id", (request, response) -> {
-			return null;
-		});
+		Spark.get("/authors/:id", (request, response) -> null);
 
-		Spark.get("/topics/:id", ((request, response) -> {
-			return null;
-		}));
+		Spark.get("/topics/:id", ((request, response) -> null));
 		// END GET
 
 		// TODO:

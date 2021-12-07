@@ -5,6 +5,7 @@ import it.castelli.ksv.HTTPHandler;
 import javafx.fxml.FXML;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -17,7 +18,7 @@ public class MainSceneController {
 
 	@FXML
 	private void onGetButton() {
-		System.out.println(HTTPHandler.getAllAuthors());
+		System.out.println(Arrays.toString(HTTPHandler.getAllAuthors()));
 	}
 
 	@FXML

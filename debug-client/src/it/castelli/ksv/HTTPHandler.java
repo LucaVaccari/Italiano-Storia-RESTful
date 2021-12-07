@@ -1,5 +1,7 @@
 package it.castelli.ksv;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.*;
 
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.HashMap;
  */
 public class HTTPHandler {
 	private static final String URL = "http://localhost:" + SharedData.PORT;
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 	private static void addFilters(HttpRequest<?> request, HashMap<String, String> queries) {
 		for (var entry : queries.entrySet()) {
@@ -39,43 +42,57 @@ public class HTTPHandler {
 		return deleteRequest.asString().getBody();
 	}
 
-	// TODO: convert from JSON for the GET methods
-
 	/**
 	 * Sends a GET request to get a list of authors
 	 *
 	 * @param queries A list of filters to apply to the request (see the REST documentation)
-	 * @return The list of authors in JSON
+	 * @return The list of authors
 	 */
-	public static String getAuthors(HashMap<String, String> queries) {
-		return get("/authors", queries);
+	public static Author[] getAuthors(HashMap<String, String> queries) {
+		String json = get("/authors", queries);
+		Author[] authors = new Author[0];
+		try {
+			authors = mapper.readValue(json, Author[].class);
+		}
+		catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	/**
 	 * Sends a GET request to get a list of topics
 	 *
 	 * @param queries A list of filters to apply to the request (see the REST documentation)
-	 * @return The list of topics in JSON
+	 * @return The list of topics
 	 */
-	public static String getTopics(HashMap<String, String> queries) {
-		return get("/topics", queries);
+	public static Topic[] getTopics(HashMap<String, String> queries) {
+		String json = get("/topics", queries);
+		Topic[] topics = new Topic[0];
+		try {
+			topics = mapper.readValue(json, Topic[].class);
+		}
+		catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return topics;
 	}
 
 	/**
 	 * Sends a GET request to get the list of all authors
 	 *
-	 * @return The list of all authors in JSON
+	 * @return The list of all authors
 	 */
-	public static String getAllAuthors() {
+	public static Author[] getAllAuthors() {
 		return getAuthors(new HashMap<>());
 	}
 
 	/**
 	 * Sends a GET request to get the list of all topics
 	 *
-	 * @return The list of all topics in JSON
+	 * @return The list of all topics
 	 */
-	public static String getAllTopics() {
+	public static Topic[] getAllTopics() {
 		return getTopics(new HashMap<>());
 	}
 
