@@ -25,12 +25,13 @@ public class RestService {
         Spark.get("/authors", (request, response) -> {
             HashMap<String, String> filterMap = generateQueryMap(request);
             var authors = DatabaseInterface.getAuthors(filterMap);
-            // TODO: test
             if (filterMap.containsKey("lifeyear")) {
                 int lifeYear = Integer.parseInt(filterMap.get("lifeyear"));
-                authors =
-                        Arrays.stream(authors).filter(a -> lifeYear > a.getBirthDate().getYear() &&
-                                lifeYear < a.getDeathDate().getYear()).toList().toArray(new Author[0]);
+                authors = Arrays.stream(authors).filter(a -> {
+                    int birthYear = Utility.dateFromMillis(a.getBirthDate().getTime()).getYear();
+                    int deathYear = Utility.dateFromMillis(a.getDeathDate().getTime()).getYear();
+                    return lifeYear > birthYear && lifeYear < deathYear;
+                }).toList().toArray(new Author[0]);
             }
             System.out.println("Returning author(s)");
             return mapper.writeValueAsString(authors);
@@ -39,12 +40,13 @@ public class RestService {
         Spark.get("/topics", ((request, response) -> {
             HashMap<String, String> filterMap = generateQueryMap(request);
             var topics = DatabaseInterface.getTopics(filterMap);
-            // TODO: test
-            if (filterMap.containsKey("lifeyear")) {
-                int lifeYear = Integer.parseInt(filterMap.get("lifeyear"));
-                topics =
-                        Arrays.stream(topics).filter(a -> lifeYear > a.getStartDate().getYear() &&
-                                lifeYear < a.getEndDate().getYear()).toList().toArray(new Topic[0]);
+            if (filterMap.containsKey("year")) {
+                int year = Integer.parseInt(filterMap.get("year"));
+                topics = Arrays.stream(topics).filter(a -> {
+                    int startYear = Utility.dateFromMillis(a.getStartDate().getTime()).getYear();
+                    int endYear = Utility.dateFromMillis(a.getEndDate().getTime()).getYear();
+                    return year > startYear && year < endYear;
+                }).toList().toArray(new Topic[0]);
             }
             System.out.println("Returning topic(s)");
             return mapper.writeValueAsString(topics);
@@ -70,7 +72,7 @@ public class RestService {
         });
         // END POST
 
-        // TODO: imlement PUT
+        // TODO: implement PUT
         // PUT
         Spark.put("/authors/:id", (request, response) -> {
             //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Author.class));

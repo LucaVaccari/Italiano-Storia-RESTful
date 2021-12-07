@@ -26,7 +26,6 @@ public final class DatabaseInterface {
     private DatabaseInterface() {
     }
 
-    // TODO: getTopicById
     // TODO: getOpusIds
     // TODO: getOpusById
 
@@ -51,7 +50,6 @@ public final class DatabaseInterface {
         return ids.toArray(new Integer[0]);
     }
 
-    // TODO: test
     // TODO: implement topic year search
     public static Integer[] getTopicIds(HashMap<String, String> filterMap) {
         ArrayList<Integer> ids = new ArrayList<>();
