@@ -6,7 +6,7 @@ Di nobili natali[3], visse in un ambiente di tradizioni liberali. Si dedicò ini
 La nuova concezione verista di Verga pose il cardine dell'opera letteraria sulla 'sparizione' dell'autore, facendo in modo che nella narrazione i fatti si sviluppassero da soli, come per una necessità spontanea.[5] Il linguaggio di Verga è rude e spoglio come un riflesso del mondo che rappresenta, fatto sia di povera gente come ne I Malavoglia, sia di ricchi come in Mastro-don Gesualdo, tutti comunque dei 'vinti' nella lotta quotidiana della vita.
 
 Lo scrittore si occupò anche di teatro, sceneggiando alcune sue novelle di cui la più famosa è Cavalleria rusticana musicata in seguito da Pietro Mascagni. Verga divenne Senatore del Regno nel 1920 su nomina del re Vittorio Emanuele III."
-)
+);
 
 INSERT INTO `argomenti`(`nome`, `data_inizio`, `data_fine`, `descrizione`, `luogo`) VALUES ("Prima Guerra Mondiale", "1914-07-28", "1918-11-11", "La prima guerra mondiale fu un conflitto che coinvolse le principali potenze e molte di quelle minori tra il 28 luglio 1914 e l'11 novembre 1918. Chiamata inizialmente dai contemporanei 'guerra europea', con il coinvolgimento successivo delle colonie dell'Impero britannico e di altri paesi extraeuropei, tra cui gli Stati Uniti d'America e l'Impero giapponese, prese il nome di guerra mondiale o Grande Guerra[1]: fu infatti il più grande conflitto armato mai combattuto fino alla successiva seconda guerra mondiale[2].
 
