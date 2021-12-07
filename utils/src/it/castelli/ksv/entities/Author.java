@@ -1,4 +1,4 @@
-package it.castelli.ksv;
+package it.castelli.ksv.entities;
 
 import java.sql.Date;
 

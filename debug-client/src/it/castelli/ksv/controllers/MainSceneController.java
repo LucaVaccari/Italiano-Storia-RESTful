@@ -1,6 +1,6 @@
 package it.castelli.ksv.controllers;
 
-import it.castelli.ksv.Author;
+import it.castelli.ksv.entities.Author;
 import it.castelli.ksv.HTTPHandler;
 import javafx.fxml.FXML;
 

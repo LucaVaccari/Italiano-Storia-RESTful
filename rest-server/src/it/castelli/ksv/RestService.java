@@ -1,6 +1,8 @@
 package it.castelli.ksv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.castelli.ksv.entities.Author;
+import it.castelli.ksv.entities.Topic;
 import spark.Request;
 import spark.Spark;
 
@@ -9,9 +11,6 @@ import java.util.HashMap;
 
 public class RestService {
 	private static final ObjectMapper mapper = new ObjectMapper();
-
-	// TODO: get author id
-	// TODO: get topic id
 
 	// TODO: queries for opuses
 

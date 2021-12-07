@@ -1,5 +1,7 @@
 package it.castelli.ksv;
 
+import it.castelli.ksv.entities.Author;
+import it.castelli.ksv.entities.Topic;
 import it.castelli.ksv.sqlUtils.QueryGenerator;
 import it.castelli.ksv.sqlUtils.filters.EqualFilter;
 import it.castelli.ksv.sqlUtils.filters.Filter;
@@ -20,7 +22,61 @@ public final class DatabaseInterface {
 
 	private static Connection sqlConnection;
 
+	// prevent class instantiation
 	private DatabaseInterface() {
+	}
+
+	// TODO: getTopicById
+	// TODO: getAuthorById
+	// TODO: getOpusIds
+	// TODO: getOpusById
+
+	// TODO: test getAuthorId
+	// TODO: implement author lifeYear search
+	public Integer[] getAuthorIds(HashMap<String, String> filterMap) throws SQLException {
+		ArrayList<Integer> ids = new ArrayList<>();
+		ArrayList<Filter> filterArr = new ArrayList<>();
+		for (var entry : filterMap.entrySet()) {
+			switch (entry.getKey().toLowerCase()) {
+				case "firstname",
+						"lastname",
+						"birthyear",
+						"deathyear" -> filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
+			}
+		}
+		String[] fields = new String[]{"id_autore"};
+		String sql = QueryGenerator.generateSelectQuery(fields, "autori", filterArr.toArray(new Filter[0]));
+		ResultSet result = sqlConnection.createStatement().executeQuery(sql);
+		while (result.next()) {
+			ids.add(result.getInt("id_autore"));
+		}
+		return ids.toArray(new Integer[0]);
+	}
+
+	// TODO: test
+	// TODO: implement topic year search
+	public Integer[] getTopicIds(HashMap<String, String> filterMap) {
+		ArrayList<Integer> ids = new ArrayList<>();
+
+		try {
+			ArrayList<Filter> filterArr = new ArrayList<>();
+			for (var entry : filterMap.entrySet()) {
+				switch (entry.getKey().toLowerCase()) {
+					case "name", "place" -> filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
+				}
+			}
+			String[] fields = new String[]{"id_argomento"};
+			String sql = QueryGenerator.generateSelectQuery(fields, "argomenti", filterArr.toArray(new Filter[0]));
+			ResultSet result = sqlConnection.createStatement().executeQuery(sql);
+			while (result.next()) {
+				ids.add(result.getInt("id_argomento"));
+			}
+
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ids.toArray(new Integer[0]);
 	}
 
 	/**
@@ -43,6 +99,7 @@ public final class DatabaseInterface {
 	 * @return An array of the authors of the database.
 	 */
 	public static Author[] getAllAuthors(HashMap<String, String> filterMap) {
+		// TODO: replace with id search
 		ArrayList<Author> authorList = new ArrayList<>();
 		try {
 			ArrayList<Filter> filterArr = new ArrayList<>();
@@ -77,6 +134,7 @@ public final class DatabaseInterface {
 	 * @return An array of the topics of the database.
 	 */
 	public static Topic[] getAllTopics(HashMap<String, String> filterMap) {
+		// TODO: replace with id search
 		ArrayList<Topic> topicList = new ArrayList<>();
 
 		try {

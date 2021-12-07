@@ -2,6 +2,8 @@ package it.castelli.ksv;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.castelli.ksv.entities.Author;
+import it.castelli.ksv.entities.Topic;
 import kong.unirest.*;
 
 import java.util.HashMap;
