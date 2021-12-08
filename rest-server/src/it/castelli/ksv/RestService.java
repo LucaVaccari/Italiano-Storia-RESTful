@@ -63,44 +63,49 @@ public class RestService {
         }));
         // END GET
 
-        // TODO: implement POST
         // POST
         Spark.post("/authors", (request, response) -> {
-            //DataProvider.addData(mapper.readValue(request.body(), Author.class));
+            Author author = mapper.readValue(request.body(), Author.class);
+            DatabaseInterface.postAuthor(author);
             System.out.println("Author successfully added");
             return "Author successfully added";
         });
         Spark.post("/topics", (request, response) -> {
-            //DataProvider.addData(mapper.readValue(request.body(), Topic.class));
+            Topic topic = mapper.readValue(request.body(), Topic.class);
+            DatabaseInterface.postTopic(topic);
             System.out.println("Topic successfully added");
             return "Topic successfully added";
         });
         // END POST
 
-        // TODO: implement PUT
         // PUT
         Spark.put("/authors/:id", (request, response) -> {
-            //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Author.class));
+            Author author = mapper.readValue(request.body(), Author.class);
+            int id = Integer.parseInt(request.params(":id"));
+            DatabaseInterface.putAuthor(author, id);
             System.out.println("Author successfully updated");
             return "Author successfully updated";
         });
         Spark.put("/topics/:id", ((request, response) -> {
-            //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Topic.class));
+            Topic topic = mapper.readValue(request.body(), Topic.class);
+            int id = Integer.parseInt(request.params(":id"));
+            DatabaseInterface.putTopic(topic, id);
             System.out.println("Topic successfully updated");
             return "Topic successfully updated";
         }));
         // END PUT
 
-        // TODO: implement DELETE
         // DELETE
         Spark.delete("/authors/:id", (request, response) -> {
-            //DataProvider.removeData(request.params(":id"));
+            int id = Integer.parseInt(request.params(":id"));
+            DatabaseInterface.deleteAuthor(id);
             System.out.println("Author(s) removed");
             return "Author(s) removed";
         });
 
         Spark.delete("/topics/:id", ((request, response) -> {
-            //DataProvider.removeData(request.params(":id"));
+            int id = Integer.parseInt(request.params(":id"));
+            DatabaseInterface.deleteTopic(id);
             System.out.println("Topic(s) removed");
             return "Topic(s) removed";
         }));

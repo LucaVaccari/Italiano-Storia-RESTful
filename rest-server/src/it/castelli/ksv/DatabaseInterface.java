@@ -26,9 +26,28 @@ public final class DatabaseInterface {
     private DatabaseInterface() {
     }
 
+    /**
+     * Initialize the connection with the database.
+     */
+    public static void initialize() {
+        try {
+            sqlConnection = DriverManager.getConnection(DB_URL + "?user=" + DB_USERNAME);
+            System.out.println("Connected to " + DB_URL + " as " + DB_USERNAME);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // TODO: getOpusIds
     // TODO: getOpusById
 
+    /**
+     * Gets a list of ids of authors filtered by a filter map
+     *
+     * @param filterMap A list of query for selecting specific authors
+     * @return An array of ids of authors
+     * @throws SQLException In case the query is bad formed
+     */
     // TODO: implement author lifeYear search
     public static Integer[] getAuthorIds(HashMap<String, String> filterMap) throws SQLException {
         ArrayList<Integer> ids = new ArrayList<>();
@@ -50,6 +69,12 @@ public final class DatabaseInterface {
         return ids.toArray(new Integer[0]);
     }
 
+    /**
+     * Gets a list of ids of topics filtered by a filter map
+     *
+     * @param filterMap A list of query for selecting specific topics
+     * @return An array of ids of topics
+     */
     // TODO: implement topic year search
     public static Integer[] getTopicIds(HashMap<String, String> filterMap) {
         ArrayList<Integer> ids = new ArrayList<>();
@@ -75,6 +100,13 @@ public final class DatabaseInterface {
         return ids.toArray(new Integer[0]);
     }
 
+    /**
+     * Gets an author from its id
+     *
+     * @param id The id of the author
+     * @return The author
+     * @throws SQLException In case the query is bad formed
+     */
     public static Author getAuthorById(int id) throws SQLException {
         String[] fields = new String[]{"nome", "cognome", "data_nascita", "data_morte", "vita"};
         Filter[] filters = new Filter[]{
@@ -96,6 +128,13 @@ public final class DatabaseInterface {
         return null;
     }
 
+    /**
+     * Gets a topic from its id
+     *
+     * @param id The id of the topic
+     * @return The topic
+     * @throws SQLException In case the query is bad formed
+     */
     public static Topic getTopicById(int id) throws SQLException {
         Filter[] filters = new Filter[]{
                 new EqualFilter("id_argomento", String.valueOf(id))
@@ -113,18 +152,6 @@ public final class DatabaseInterface {
             );
         }
         return null;
-    }
-
-    /**
-     * Initialize the connection with the database.
-     */
-    public static void initialize() {
-        try {
-            sqlConnection = DriverManager.getConnection(DB_URL + "?user=" + DB_USERNAME);
-            System.out.println("Connected to " + DB_URL + " as " + DB_USERNAME);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -151,5 +178,29 @@ public final class DatabaseInterface {
         Topic[] topics = new Topic[topicIds.length];
         for (int i = 0; i < topicIds.length; i++) topics[i] = getTopicById(topicIds[i]);
         return topics;
+    }
+
+    // TODO: implement postAuthor
+    public static void postAuthor(Author author) {
+    }
+
+    // TODO: implement postTopic
+    public static void postTopic(Topic topic) {
+    }
+
+    // TODO: implement putAuthor
+    public static void putAuthor(Author author, int id) {
+    }
+
+    // TODO: implement putTopic
+    public static void putTopic(Topic topic, int id) {
+    }
+
+    // TODO: implement deleteAuthor
+    public static void deleteAuthor(int id) {
+    }
+
+    // TODO: implement deleteTopic
+    public static void deleteTopic(int id) {
     }
 }
