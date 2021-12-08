@@ -1,6 +1,8 @@
 package it.castelli.ksv.controllers;
 
 import it.castelli.ksv.HTTPHandler;
+import it.castelli.ksv.SceneManager;
+import it.castelli.ksv.SceneType;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -10,13 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class GetWindowController {
-    private enum GetSubject {
-        AUTHOR, TOPIC
-    }
-
     @FXML
     private Parent authorInputs, topicInputs;
-
     @FXML
     private Label jsonOutput;
     @FXML
@@ -24,8 +21,12 @@ public class GetWindowController {
             authorDeathYearTextField, authorLifeYearTextField;
     @FXML
     private TextField topicNameTextField, topicYearTextField, topicPlaceTextField;
-
     private GetSubject getSubject = GetSubject.AUTHOR;
+
+    @FXML
+    public void onBackButton() {
+        SceneManager.setScene(SceneType.MAIN);
+    }
 
     @FXML
     private void activateAuthorInputs() {
@@ -94,5 +95,9 @@ public class GetWindowController {
                 jsonOutput.setText(Arrays.toString(HTTPHandler.getTopics(filters)));
             }
         }
+    }
+
+    private enum GetSubject {
+        AUTHOR, TOPIC
     }
 }
