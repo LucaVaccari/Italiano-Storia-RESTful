@@ -3,6 +3,7 @@ package it.castelli.ksv.entities;
 import java.sql.Date;
 
 public class Topic implements Entity {
+    private final int id;
     private final String name;
     private final Date startDate, endDate;
     private final String description, place;
@@ -11,6 +12,7 @@ public class Topic implements Entity {
 
     // empty constructor is necessary for deserializing from JSON
     public Topic() {
+        id = -1;
         this.name = "";
         this.startDate = null;
         this.endDate = null;
@@ -18,7 +20,8 @@ public class Topic implements Entity {
         this.place = "";
     }
 
-    public Topic(String name, Date startDate, Date endDate, String description, String place) {
+    public Topic(int id, String name, Date startDate, Date endDate, String description, String place) {
+        this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

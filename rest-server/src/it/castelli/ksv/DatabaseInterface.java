@@ -84,6 +84,7 @@ public final class DatabaseInterface {
         ResultSet result = sqlConnection.createStatement().executeQuery(sql);
         if (result.next()) {
             return new Author(
+                    id,
                     result.getString("nome"),
                     result.getString("cognome"),
                     result.getDate("data_nascita"),
@@ -104,7 +105,7 @@ public final class DatabaseInterface {
         ResultSet result = sqlConnection.createStatement().executeQuery(sql);
         if (result.next()) {
             return new Topic(
-                    result.getString("nome"),
+                    id, result.getString("nome"),
                     result.getDate("data_inizio"),
                     result.getDate("data_fine"),
                     result.getString("descrizione"),

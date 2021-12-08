@@ -52,10 +52,15 @@ public class RestService {
             return mapper.writeValueAsString(topics);
         }));
 
-        // TODO: implement id search
-        Spark.get("/authors/:id", (request, response) -> null);
+        Spark.get("/authors/:id", (request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            return mapper.writeValueAsString(DatabaseInterface.getAuthorById(id));
+        });
 
-        Spark.get("/topics/:id", ((request, response) -> null));
+        Spark.get("/topics/:id", ((request, response) -> {
+            int id = Integer.parseInt(request.params(":id"));
+            return mapper.writeValueAsString(DatabaseInterface.getTopicById(id));
+        }));
         // END GET
 
         // TODO: implement POST
