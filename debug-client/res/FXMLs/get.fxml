@@ -2,15 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="529.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/11.0.2" fx:controller="it.castelli.ksv.controllers.GetWindowController">
+<AnchorPane prefHeight="529.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.castelli.ksv.controllers.GetWindowController">
     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0"
           spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
           AnchorPane.topAnchor="10.0">
         <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="10.0" prefWidth="200.0"
               VBox.vgrow="ALWAYS">
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBackButton"
-                    text="Indietro" textAlignment="CENTER" HBox.hgrow="ALWAYS"/>
+            <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                    mnemonicParsing="false" onAction="#onBackButton" text="Indietro" textAlignment="CENTER"
+                    HBox.hgrow="ALWAYS"/>
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                     onAction="#activateAuthorInputs" text="Autore" HBox.hgrow="ALWAYS"/>
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
@@ -103,7 +104,7 @@
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
                     maxWidth="1.7976931348623157E308" pannable="true" prefHeight="200.0" prefWidth="200.0"
                     VBox.vgrow="ALWAYS">
-            <Label fx:id="jsonOutput" maxWidth="1.7976931348623157E308" text="Risposta" wrapText="true"/>
+            <Label fx:id="output" maxWidth="1.7976931348623157E308" text="Risposta" wrapText="true"/>
         </ScrollPane>
     </VBox>
 </AnchorPane>

@@ -9,6 +9,7 @@ public class Topic implements Entity {
     // TODO: private final int[] topicsIds;
     // TODO: private final int[] authorsIds;
 
+    // empty constructor is necessary for deserializing from JSON
     public Topic() {
         this.name = "";
         this.startDate = null;

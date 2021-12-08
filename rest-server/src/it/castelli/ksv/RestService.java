@@ -79,7 +79,7 @@ public class RestService {
             System.out.println("Author successfully updated");
             return "Author successfully updated";
         });
-        Spark.get("/topics/:id", ((request, response) -> {
+        Spark.put("/topics/:id", ((request, response) -> {
             //DataProvider.modifyData(request.params(":id"), mapper.readValue(request.body(), Topic.class));
             System.out.println("Topic successfully updated");
             return "Topic successfully updated";
@@ -94,7 +94,7 @@ public class RestService {
             return "Author(s) removed";
         });
 
-        Spark.get("/topics/:id", ((request, response) -> {
+        Spark.delete("/topics/:id", ((request, response) -> {
             //DataProvider.removeData(request.params(":id"));
             System.out.println("Topic(s) removed");
             return "Topic(s) removed";

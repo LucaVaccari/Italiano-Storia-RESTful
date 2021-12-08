@@ -38,9 +38,8 @@ public class HTTPHandler {
         return putRequest.body(jsonAttachment).asString().getBody();
     }
 
-    private static String delete(String subURL, HashMap<String, String> queries) {
-        HttpRequestWithBody deleteRequest = Unirest.delete(URL + subURL);
-        addFilters(deleteRequest, queries);
+    private static String delete(String subURL, int id) {
+        HttpRequestWithBody deleteRequest = Unirest.delete(URL + subURL + "/" + id);
         return deleteRequest.asString().getBody();
     }
 
@@ -141,20 +140,20 @@ public class HTTPHandler {
     /**
      * Sends a DELETE request to delete an author
      *
-     * @param queries Filters to identify the author to delete (see the REST documentation)
+     * @param id The id of the author to delete
      * @return The server response message
      */
-    public static String deleteAuthors(HashMap<String, String> queries) {
-        return delete("/authors", queries);
+    public static String deleteAuthor(int id) {
+        return delete("/authors", id);
     }
 
     /**
      * Sends a DELETE request to delete an topic
      *
-     * @param queries Filters to identify the topic to delete (see the REST documentation)
+     * @param id The id of the topic to delete
      * @return The server response message
      */
-    public static String deleteTopics(HashMap<String, String> queries) {
-        return delete("/topics", queries);
+    public static String deleteTopic(int id) {
+        return delete("/topics", id);
     }
 }

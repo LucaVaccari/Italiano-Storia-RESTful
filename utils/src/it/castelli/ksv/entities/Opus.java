@@ -11,6 +11,7 @@ public class Opus implements Entity {
     // TODO: private final int authorId;
     // TODO: private final int[] topicsIds;
 
+    // empty constructor is necessary for deserializing from JSON
     public Opus() {
         title = "";
         publishDate = null;

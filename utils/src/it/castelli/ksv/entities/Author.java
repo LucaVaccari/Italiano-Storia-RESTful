@@ -9,6 +9,7 @@ public class Author implements Entity {
     // TODO: private final int[] opusesIds;
     // TODO: private final int[] topicsIds;
 
+    // empty constructor is necessary for deserializing from JSON
     public Author() {
         firstName = "";
         lastName = "";

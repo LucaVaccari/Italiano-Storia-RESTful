@@ -15,7 +15,7 @@ public class GetWindowController {
     @FXML
     private Parent authorInputs, topicInputs;
     @FXML
-    private Label jsonOutput;
+    private Label output;
     @FXML
     private TextField authorFirstNameTextField, authorLastNameTextField, authorBirthYearTextField,
             authorDeathYearTextField, authorLifeYearTextField;
@@ -75,7 +75,7 @@ public class GetWindowController {
                 if (!lifeyear.equals("")) {
                     filters.put("lifeyear", lifeyear.toLowerCase());
                 }
-                jsonOutput.setText(Arrays.toString(HTTPHandler.getAuthors(filters)));
+                output.setText(Arrays.toString(HTTPHandler.getAuthors(filters)));
             }
             case TOPIC -> {
                 HashMap<String, String> filters = new HashMap<>();
@@ -92,12 +92,9 @@ public class GetWindowController {
                     filters.put("place", place.toLowerCase());
                 }
 
-                jsonOutput.setText(Arrays.toString(HTTPHandler.getTopics(filters)));
+                output.setText(Arrays.toString(HTTPHandler.getTopics(filters)));
             }
         }
     }
 
-    private enum GetSubject {
-        AUTHOR, TOPIC
-    }
 }
