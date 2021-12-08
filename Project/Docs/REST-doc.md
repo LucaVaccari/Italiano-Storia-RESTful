@@ -1,59 +1,65 @@
-### GET
+# KSV service
 
-#### authors
+This REST service provides the HTTP CRUD method to access the ksv-links database.
 
-Request format: <URL>/authors?queries Queries:
+## GET
+
+The GET method returns an array of results based on the queries.
+
+### Queries
+
+There are different allowed queries that can be used to filter the results. Any non allowed query will be ignored. If no
+query is provided all the information is returned. Queries are case-insensitive.
+
+A query follows this format: &lt;name&gt;=&lt;value&gt;. Queries can be concatenated with '&'.
+
+##### On authors
 
 - firstname: the first name of the author
 - lastname: the last name of the author
 - birthyear: the year of birth of the author
 - deathyear: the year of death of the author
-- lifeyear: any year in which the author was alive (for example 1912 is valid for an author born in 1888 and dead in
-    1970)
+- lifeyear: any year in which the author was alive
+  (for example 1904 is valid for an author born in 1888 and dead in 1970)
 
-#### topics
+##### On topics
 
-Request format: <URL>/topics?queries Queries:
+- name: the name of the topic (spaces can be included by surrounding the value with " or can be replaced by '-')
+- year: any year in which the topic was happening
+- place: the place of the topic (formatted as the name)
 
-- name: the name of the topic (spaces must be replaced with dashes '-')
-- year: any year in which the topic is (for example a topic that starts in 1914 and finishes in 1918 would be found with
-    1917)
-- place: the place of the topic (spaces must be replaced with dashes '-')
+### Allowed URLs
 
-### POST
+- /authors?queries
+- /authors/:id
+- /topics?queries
+- /topics/:id
 
-#### authors
+## POST
 
-Request format: <URL>/authors
+The POST method adds new information in the database. The information must be passed in the body of the request in JSON
+and must be well-formed.
 
-Request body: JSON of the author to add which must have the following properties:
+### Allowed URLs
 
-- firstName
-- lastName
-- birthDate
-- deathDate
-- life
+- /authors
+- /topics
 
-#### topics
+## PUT
 
-Request format: <URL>/topics
+The PUT method updates existing information in the database. The information must be passed in the body of the request
+in JSON and must be well-formed.
 
-Request body: JSON of the topic to add which must have the following properties:
+### Allowed URLs
 
-- name
-- startdate
-- enddate
-- description
-- place
+- /authors/:id
+- /topics/:id
 
-### PUT
+## DELETE
 
-#### authors
+The DELETE method deletes information from the database.
 
-#### topics
+### Allowed URLs
 
-### DELETE
-
-#### authors
-
-#### topics
+- /authors/:id
+- /topics/:id
