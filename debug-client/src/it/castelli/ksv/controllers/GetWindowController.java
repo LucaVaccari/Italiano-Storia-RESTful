@@ -5,6 +5,7 @@ import it.castelli.ksv.SceneManager;
 import it.castelli.ksv.SceneType;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -21,6 +22,9 @@ public class GetWindowController {
             authorDeathYearTextField, authorLifeYearTextField;
     @FXML
     private TextField topicNameTextField, topicYearTextField, topicPlaceTextField;
+    @FXML
+    private Button authorsButton, topicsButton;
+
     private GetSubject getSubject = GetSubject.AUTHOR;
 
     @FXML
@@ -36,6 +40,9 @@ public class GetWindowController {
         authorInputs.setVisible(true);
         topicInputs.setDisable(false);
 
+        authorsButton.setDisable(true);
+        topicsButton.setDisable(false);
+
         getSubject = GetSubject.AUTHOR;
     }
 
@@ -46,6 +53,9 @@ public class GetWindowController {
 
         topicInputs.setVisible(true);
         topicInputs.setDisable(false);
+
+        authorsButton.setDisable(false);
+        topicsButton.setDisable(true);
 
         getSubject = GetSubject.TOPIC;
     }
