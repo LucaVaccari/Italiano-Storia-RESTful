@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +21,7 @@ import java.util.HashMap;
 public final class DatabaseInterface {
 	private static final String DB_URL = "jdbc:mysql://localhost/ksv-links";
 	private static final String DB_USERNAME = "root";
+	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	private static Connection sqlConnection;
 
@@ -168,6 +171,7 @@ public final class DatabaseInterface {
 	 *
 	 * @param filterMap A map containing filters to apply to the query (see the REST documentation)
 	 * @return An array of the authors of the database.
+	 * @throws SQLException In case the query is bad formed
 	 */
 	public static Author[] getAuthors(HashMap<String, String> filterMap) throws SQLException {
 		Integer[] authorIds = getAuthorIds(filterMap);
@@ -177,10 +181,11 @@ public final class DatabaseInterface {
 	}
 
 	/**
-	 * Provides an array of all topics in the database.
+	 * Provides an array of all topics in the database
 	 *
 	 * @param filterMap A map containing filters to apply to the query (see the REST documentation)
-	 * @return An array of the topics of the database.
+	 * @return An array of the topics of the database
+	 * @throws SQLException In case the query is bad formed
 	 */
 	public static Topic[] getTopics(HashMap<String, String> filterMap) throws SQLException {
 		Integer[] topicIds = getTopicIds(filterMap);
@@ -189,22 +194,86 @@ public final class DatabaseInterface {
 		return topics;
 	}
 
-	// TODO: implement postAuthor
+	/**
+	 * Adds the passed author in the database
+	 *
+	 * @param author The author to add
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void postAuthor(Author author) throws SQLException {
+		String sql =
+				"INSERT INTO autori (nome, cognome, data_nascita, data_morte, vita) " +
+						"VALUES (" +
+						author.getFirstName() + ", " +
+						author.getLastName() + ", " +
+						dateFormat.format(author.getBirthDate()) + ", " +
+						dateFormat.format(author.getDeathDate()) + ", " +
+						author.getLife() +
+						")";
+		sqlConnection.createStatement().executeQuery(sql);
 	}
 
-	// TODO: implement postTopic
+	/**
+	 * Adds the passed topic in the database
+	 *
+	 * @param topic The topic to add
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void postTopic(Topic topic) throws SQLException {
+		String sql =
+				"INSERT INTO argomenti (nome, data_inizio, data_fine, descrizione, luogo) " +
+						"VALUES (" +
+						topic.getName() + ", " +
+						dateFormat.format(topic.getStartDate()) + ", " +
+						dateFormat.format(topic.getEndDate()) + ", " +
+						topic.getDescription() + ", " +
+						topic.getPlace() +
+						")";
+		sqlConnection.createStatement().executeQuery(sql);
 	}
 
-	// TODO: implement putAuthor
+	/**
+	 * Updates an author in the database
+	 *
+	 * @param author The new author information
+	 * @param id     the id of the author to update
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void putAuthor(Author author, int id) throws SQLException {
+		String sql = "UPDATE autori SET" +
+				"nome = " + author.getFirstName() +
+				", cognome = " + author.getLastName() +
+				", data_nascita = " + dateFormat.format(author.getBirthDate()) +
+				", data_morte = " + dateFormat.format(author.getDeathDate()) +
+				", vita = " + author.getLife() +
+				"WHERE id_autore = " + id;
+		sqlConnection.createStatement().executeQuery(sql);
 	}
 
-	// TODO: implement putTopic
+	/**
+	 * Updates a topic in the database
+	 *
+	 * @param topic The new topic information
+	 * @param id    The id of the topic to update
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void putTopic(Topic topic, int id) throws SQLException {
+		String sql = "UPDATE argomenti SET" +
+				"nome = " + topic.getName() +
+				", data_inizio = " + dateFormat.format(topic.getStartDate()) +
+				", data_fine = " + dateFormat.format(topic.getEndDate()) +
+				", descrizione = " + topic.getDescription() +
+				", luogo = " + topic.getPlace() +
+				"WHERE id_argomento = " + id;
+		sqlConnection.createStatement().executeQuery(sql);
 	}
 
+	/**
+	 * Delete an author from the database
+	 *
+	 * @param id The id of the author to remove
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void deleteAuthor(int id) throws SQLException {
 		Filter[] filters = new Filter[]{
 				new EqualFilter("id_autore", String.valueOf(id))
@@ -213,6 +282,12 @@ public final class DatabaseInterface {
 		sqlConnection.createStatement().executeQuery(sql);
 	}
 
+	/**
+	 * Delete a topic from the database
+	 *
+	 * @param id The id of the topic to remove
+	 * @throws SQLException In case the query is bad formed
+	 */
 	public static void deleteTopic(int id) throws SQLException {
 		Filter[] filters = new Filter[]{
 				new EqualFilter("id_argomento", String.valueOf(id))
