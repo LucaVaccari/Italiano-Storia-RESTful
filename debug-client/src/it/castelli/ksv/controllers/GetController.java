@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class GetWindowController {
+public class GetController {
     @FXML
     private Parent authorInputs, topicInputs;
     @FXML

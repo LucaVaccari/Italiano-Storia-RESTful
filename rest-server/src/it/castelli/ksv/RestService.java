@@ -1,5 +1,6 @@
 package it.castelli.ksv;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.castelli.ksv.entities.Author;
 import it.castelli.ksv.entities.Topic;
@@ -96,7 +97,7 @@ public class RestService {
 				System.out.println("Author successfully added");
 				return "Author successfully added";
 			}
-			catch (SQLException e) {
+			catch (SQLException | JsonProcessingException e) {
 				e.printStackTrace();
 				return "Error while adding the author: " + e.getMessage();
 			}
@@ -108,7 +109,7 @@ public class RestService {
 				System.out.println("Topic successfully added");
 				return "Topic successfully added";
 			}
-			catch (SQLException e) {
+			catch (SQLException | JsonProcessingException e) {
 				e.printStackTrace();
 				return "Error while adding the topic: " + e.getMessage();
 			}

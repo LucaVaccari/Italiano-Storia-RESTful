@@ -203,14 +203,14 @@ public final class DatabaseInterface {
 	public static void postAuthor(Author author) throws SQLException {
 		String sql =
 				"INSERT INTO autori (nome, cognome, data_nascita, data_morte, vita) " +
-						"VALUES (" +
-						author.getFirstName() + ", " +
-						author.getLastName() + ", " +
-						dateFormat.format(author.getBirthDate()) + ", " +
-						dateFormat.format(author.getDeathDate()) + ", " +
+						"VALUES ('" +
+						author.getFirstName() + "', '" +
+						author.getLastName() + "', '" +
+						dateFormat.format(author.getBirthDate()) + "', '" +
+						dateFormat.format(author.getDeathDate()) + "', '" +
 						author.getLife() +
-						")";
-		sqlConnection.createStatement().executeQuery(sql);
+						"')";
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 
 	/**
@@ -223,13 +223,13 @@ public final class DatabaseInterface {
 		String sql =
 				"INSERT INTO argomenti (nome, data_inizio, data_fine, descrizione, luogo) " +
 						"VALUES (" +
-						topic.getName() + ", " +
-						dateFormat.format(topic.getStartDate()) + ", " +
-						dateFormat.format(topic.getEndDate()) + ", " +
-						topic.getDescription() + ", " +
+						topic.getName() + "', '" +
+						dateFormat.format(topic.getStartDate()) + "', '" +
+						dateFormat.format(topic.getEndDate()) + "', '" +
+						topic.getDescription() + "', '" +
 						topic.getPlace() +
-						")";
-		sqlConnection.createStatement().executeQuery(sql);
+						"')";
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 
 	/**
@@ -240,14 +240,14 @@ public final class DatabaseInterface {
 	 * @throws SQLException In case the query is bad formed
 	 */
 	public static void putAuthor(Author author, int id) throws SQLException {
-		String sql = "UPDATE autori SET" +
-				"nome = " + author.getFirstName() +
-				", cognome = " + author.getLastName() +
-				", data_nascita = " + dateFormat.format(author.getBirthDate()) +
-				", data_morte = " + dateFormat.format(author.getDeathDate()) +
-				", vita = " + author.getLife() +
-				"WHERE id_autore = " + id;
-		sqlConnection.createStatement().executeQuery(sql);
+		String sql = "UPDATE autori SET " +
+				"nome = '" + author.getFirstName() +
+				"', cognome = '" + author.getLastName() +
+				"', data_nascita = '" + dateFormat.format(author.getBirthDate()) +
+				"', data_morte = '" + dateFormat.format(author.getDeathDate()) +
+				"', vita = '" + author.getLife() +
+				"' WHERE id_autore = " + id;
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 
 	/**
@@ -258,14 +258,14 @@ public final class DatabaseInterface {
 	 * @throws SQLException In case the query is bad formed
 	 */
 	public static void putTopic(Topic topic, int id) throws SQLException {
-		String sql = "UPDATE argomenti SET" +
-				"nome = " + topic.getName() +
-				", data_inizio = " + dateFormat.format(topic.getStartDate()) +
-				", data_fine = " + dateFormat.format(topic.getEndDate()) +
-				", descrizione = " + topic.getDescription() +
-				", luogo = " + topic.getPlace() +
-				"WHERE id_argomento = " + id;
-		sqlConnection.createStatement().executeQuery(sql);
+		String sql = "UPDATE argomenti SET " +
+				"nome = '" + topic.getName() +
+				"', data_inizio = '" + dateFormat.format(topic.getStartDate()) +
+				"', data_fine = '" + dateFormat.format(topic.getEndDate()) +
+				"', descrizione = '" + topic.getDescription() +
+				"', luogo = '" + topic.getPlace() +
+				"'WHERE id_argomento = " + id;
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public final class DatabaseInterface {
 				new EqualFilter("id_autore", String.valueOf(id))
 		};
 		String sql = QueryGenerator.generateDeleteQuery("autori", filters);
-		sqlConnection.createStatement().executeQuery(sql);
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 
 	/**
@@ -293,6 +293,6 @@ public final class DatabaseInterface {
 				new EqualFilter("id_argomento", String.valueOf(id))
 		};
 		String sql = QueryGenerator.generateDeleteQuery("argomenti", filters);
-		sqlConnection.createStatement().executeQuery(sql);
+		sqlConnection.createStatement().executeUpdate(sql);
 	}
 }

@@ -2,7 +2,7 @@ package it.castelli.ksv.entities;
 
 import java.sql.Date;
 
-public class Topic implements Entity {
+public class Topic {
     private final int id;
     private final String name;
     private final Date startDate, endDate;

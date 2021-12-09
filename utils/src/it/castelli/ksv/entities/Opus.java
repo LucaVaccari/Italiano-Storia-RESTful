@@ -2,7 +2,7 @@ package it.castelli.ksv.entities;
 
 import java.sql.Date;
 
-public class Opus implements Entity {
+public class Opus {
     private final String title;
     private final Date publishDate;
     private final String linguisticExpression;
