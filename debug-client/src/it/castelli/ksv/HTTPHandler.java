@@ -32,9 +32,8 @@ public class HTTPHandler {
 		return postRequest.body(jsonAttachment).asString().getBody();
 	}
 
-	private static String put(String subURL, String jsonAttachment, HashMap<String, String> queries) {
-		HttpRequestWithBody putRequest = Unirest.put(URL + subURL);
-		addFilters(putRequest, queries);
+	private static String put(String subURL, String jsonAttachment, int id) {
+		HttpRequestWithBody putRequest = Unirest.put(URL + subURL + "/" + id);
 		return putRequest.body(jsonAttachment).asString().getBody();
 	}
 
@@ -124,23 +123,23 @@ public class HTTPHandler {
 	/**
 	 * Sends a PUT request to update the information of an author
 	 *
-	 * @param author  The new author information
-	 * @param queries Filters to identify the author to update (see the REST documentation)
+	 * @param author The new author information
+	 * @param id     The id of the author to update
 	 * @return The server response message
 	 */
-	public static String putAuthors(Author author, HashMap<String, String> queries) {
-		return put("/authors", new JsonObjectMapper().writeValue(author), queries);
+	public static String putAuthor(Author author, int id) {
+		return put("/authors", new JsonObjectMapper().writeValue(author), id);
 	}
 
 	/**
 	 * Sends a PUT request to update the information of a topic
 	 *
-	 * @param topic   The new topic information
-	 * @param queries Filters to identify the topic to update (see the REST documentation)
+	 * @param topic The new topic information
+	 * @param id    The id of the topic to update
 	 * @return The server response message
 	 */
-	public static String putTopics(Topic topic, HashMap<String, String> queries) {
-		return put("/topics", new JsonObjectMapper().writeValue(topic), queries);
+	public static String putTopic(Topic topic, int id) {
+		return put("/topics", new JsonObjectMapper().writeValue(topic), id);
 	}
 
 	/**

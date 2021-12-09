@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class PostController {
 	@FXML
@@ -77,15 +76,12 @@ public class PostController {
 	public void sendRequest() {
 		switch (getSubject) {
 			case AUTHOR -> {
-
-				LocalDate birthDate = authorBirthDatePicker.getValue();
-				LocalDate deathDate = authorDeathDatePicker.getValue();
 				Author author = new Author(
 						-1,
 						authorFirstNameTextField.getText().strip(),
 						authorLastNameTextField.getText().strip(),
-						Date.valueOf(birthDate),
-						Date.valueOf(deathDate),
+						Date.valueOf(authorBirthDatePicker.getValue()),
+						Date.valueOf(authorDeathDatePicker.getValue()),
 						authorLifeTextArea.getText().strip().replaceAll("'", "\"")
 				);
 				output.setText(HTTPHandler.postAuthor(author));
