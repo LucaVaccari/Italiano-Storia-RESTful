@@ -44,7 +44,6 @@ public final class DatabaseInterface {
 	 * @return An array of ids of authors
 	 * @throws SQLException In case the query is bad formed
 	 */
-	// TODO: implement author lifeYear search
 	public static Integer[] getAuthorIds(HashMap<String, String> filterMap) throws SQLException {
 		ArrayList<Integer> ids = new ArrayList<>();
 		ArrayList<Filter> filterArr = new ArrayList<>();
@@ -57,11 +56,20 @@ public final class DatabaseInterface {
 				case "deathyear" -> filterArr.add(new EqualFilter("EXTRACT(YEAR FROM data_morte)", entry.getValue()));
 			}
 		}
-		String[] fields = new String[]{"id_autore"};
+		String[] fields = new String[]{"id_autore", "data_nascita", "data_morte"};
 		String sql = QueryGenerator.generateSelectQuery(fields, "autori", filterArr.toArray(new Filter[0]));
 		ResultSet result = sqlConnection.createStatement().executeQuery(sql);
 		while (result.next()) {
-			ids.add(result.getInt("id_autore"));
+			boolean shouldAdd = true;
+			if (filterMap.containsKey("lifeyear")) {
+				int birthYear = Utility.dateFromMillis(result.getDate("data_nascita").getTime()).getYear();
+				int deathYear = Utility.dateFromMillis(result.getDate("data_morte").getTime()).getYear();
+				int lifeYear = Integer.parseInt(filterMap.get("lifeyear"));
+				shouldAdd = lifeYear >= birthYear && lifeYear <= deathYear;
+			}
+
+			if (shouldAdd)
+				ids.add(result.getInt("id_autore"));
 		}
 		return ids.toArray(new Integer[0]);
 	}
@@ -72,7 +80,6 @@ public final class DatabaseInterface {
 	 * @param filterMap A list of query for selecting specific topics
 	 * @return An array of ids of topics
 	 */
-	// TODO: implement topic year search
 	public static Integer[] getTopicIds(HashMap<String, String> filterMap) throws SQLException {
 		ArrayList<Integer> ids = new ArrayList<>();
 
@@ -83,11 +90,20 @@ public final class DatabaseInterface {
 				case "place" -> filterArr.add(new EqualFilter("luogo", entry.getValue()));
 			}
 		}
-		String[] fields = new String[]{"id_argomento"};
+		String[] fields = new String[]{"id_argomento", "data_inizio", "data_fine"};
 		String sql = QueryGenerator.generateSelectQuery(fields, "argomenti", filterArr.toArray(new Filter[0]));
 		ResultSet result = sqlConnection.createStatement().executeQuery(sql);
 		while (result.next()) {
-			ids.add(result.getInt("id_argomento"));
+			boolean shouldAdd = true;
+			if (filterMap.containsKey("year")) {
+				int startYear = Utility.dateFromMillis(result.getDate("data_inizio").getTime()).getYear();
+				int endYear = Utility.dateFromMillis(result.getDate("data_fine").getTime()).getYear();
+				int year = Integer.parseInt(filterMap.get("year"));
+				shouldAdd = year >= startYear && year <= endYear;
+			}
+
+			if (shouldAdd)
+				ids.add(result.getInt("id_argomento"));
 		}
 
 		return ids.toArray(new Integer[0]);

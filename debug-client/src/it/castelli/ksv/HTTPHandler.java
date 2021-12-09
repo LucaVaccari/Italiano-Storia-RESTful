@@ -43,6 +43,10 @@ public class HTTPHandler {
 		return deleteRequest.asString().getBody();
 	}
 
+	private static String getAuthorsJSON(HashMap<String, String> queries) {
+		return get("/authors", queries);
+	}
+
 	/**
 	 * Sends a GET request to get a list of authors
 	 *
@@ -50,7 +54,7 @@ public class HTTPHandler {
 	 * @return The list of authors
 	 */
 	public static Author[] getAuthors(HashMap<String, String> queries) {
-		String json = get("/authors", queries);
+		String json = getAuthorsJSON(queries);
 		Author[] authors = new Author[0];
 		try {
 			authors = mapper.readValue(json, Author[].class);
