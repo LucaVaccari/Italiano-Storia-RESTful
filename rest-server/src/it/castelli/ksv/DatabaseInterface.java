@@ -50,10 +50,11 @@ public final class DatabaseInterface {
 		ArrayList<Filter> filterArr = new ArrayList<>();
 		for (var entry : filterMap.entrySet()) {
 			switch (entry.getKey().toLowerCase()) {
-				case "firstname",
-						"lastname",
-						"birthyear",
-						"deathyear" -> filterArr.add(new EqualFilter(entry.getKey(), entry.getValue()));
+				case "firstname" -> filterArr.add(new EqualFilter("nome", entry.getValue()));
+				case "lastname" -> filterArr.add(new EqualFilter("cognome", entry.getValue()));
+				case "birthyear" -> filterArr.add(new EqualFilter("EXTRACT(YEAR FROM data_nascita)",
+						entry.getValue()));
+				case "deathyear" -> filterArr.add(new EqualFilter("EXTRACT(YEAR FROM data_morte)", entry.getValue()));
 			}
 		}
 		String[] fields = new String[]{"id_autore"};
