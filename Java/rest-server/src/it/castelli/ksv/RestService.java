@@ -8,7 +8,6 @@ import spark.Request;
 import spark.Spark;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class RestService {

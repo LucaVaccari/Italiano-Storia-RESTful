@@ -1,7 +1,10 @@
-/Java/gradle/
 /*/gradle
-/*/build
-/.gradle
-/.idea
+/*/.gradle
+/*/build/*
+/*/*/build
+/.idea/*
+/*/.idea
 Java/gradlew
 Java/gradlew.bat
+*.class
+*.bin
