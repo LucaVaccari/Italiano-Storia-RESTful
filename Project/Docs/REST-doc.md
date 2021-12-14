@@ -28,10 +28,19 @@ A query follows this format: &lt;name&gt;=&lt;value&gt;. Queries can be concaten
 - year: any year in which the topic was happening
 - place: the place of the topic (formatted as the name)
 
+##### On opuses
+
+- authorId: the id of the author of the opuses
+- title: the title of the opus
+- publishYear: the year of publication of the opuses
+- language: the language of the opuses
+
 ### Allowed URLs
 
 - /authors?queries
 - /authors/:id
+- /opuses?queries
+- /opuses/:id
 - /topics?queries
 - /topics/:id
 
