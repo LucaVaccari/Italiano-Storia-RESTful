@@ -1,4 +1,6 @@
 /Java/gradle/
+/*/gradle
+/*/build
 /.gradle
 /.idea
 Java/gradlew
