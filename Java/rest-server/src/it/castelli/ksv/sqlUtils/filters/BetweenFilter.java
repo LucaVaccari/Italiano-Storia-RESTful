@@ -1,20 +1,20 @@
 package it.castelli.ksv.sqlUtils.filters;
 
 public class BetweenFilter implements Filter {
-    private String fieldName, smallValue, bigValue;
+    private String value, smallValue, bigValue;
 
     public BetweenFilter(String fieldName, String smallValue, String bigValue) {
-        this.fieldName = fieldName;
+        this.value = fieldName;
         this.smallValue = smallValue;
         this.bigValue = bigValue;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getValue() {
+        return value;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getSmallValue() {

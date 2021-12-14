@@ -22,7 +22,7 @@ public class QueryGenerator {
                         builder.append(((EqualFilter) whereFilters[i]).getFieldValue());
                         builder.append("'");
                     } else if (whereFilters[i] instanceof BetweenFilter) {
-                        builder.append(((BetweenFilter) whereFilters[i]).getFieldName());
+                        builder.append(((BetweenFilter) whereFilters[i]).getValue());
                         builder.append(" BETWEEN ");
                         builder.append(((BetweenFilter) whereFilters[i]).getSmallValue());
                         builder.append(" AND ");
